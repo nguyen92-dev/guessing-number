@@ -21,7 +21,7 @@ yarn.lock
 /build
 
 # IDE
-#.idea/
+.idea/
 .vscode/
 *.swp
 *.swo
