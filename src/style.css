@@ -1,3 +1,13 @@
+/* chỉ header mới drag */
+.header {
+    -webkit-app-region: drag;
+}
+
+/* tất cả control tương tác phải no-drag */
+button, input, select, textarea, .btn, .clickable {
+    -webkit-app-region: no-drag;
+}
+
 body {
     margin: 0;
     padding: 0;
