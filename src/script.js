@@ -24,19 +24,11 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function safePlay(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        // Lazy load sources if needed
-        if (el.preload === 'none' && el.readyState === 0) {
-            // Trigger load
-            el.load();
-        }
-        const playPromise = el.play();
-        if (playPromise && typeof playPromise.then === 'function') {
-            playPromise.catch(err => {
-                console.warn('Audio play failed:', id, err.message);
-            });
+    async function play(kind) {
+        try {
+            await invoke('play_sound', { kind });
+        } catch (e) {
+            console.warn('play_sound failed', e);
         }
     }
 
@@ -46,9 +38,9 @@ window.addEventListener('DOMContentLoaded', async () => {
         gameState = await invoke('guess_number', {guess});
         updateUI();
         if (gameState.game_over) {
-            safePlay('correct-sound'); // Âm thanh đúng
+            play('Correct');
         } else {
-            safePlay('wrong-sound'); // Âm thanh sai
+            play('Wrong');
         }
         document.getElementById('guess').value = '';
     });
@@ -56,7 +48,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('reset-btn').addEventListener('click', async () => {
         gameState = await invoke('reset_game');
         updateUI();
-        safePlay('reset-sound'); // Âm thanh reset
+        play('Reset');
     });
 
     document.getElementById('exit-btn').addEventListener('click', () => {

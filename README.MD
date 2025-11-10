@@ -30,6 +30,7 @@ Các lệnh/command Tauri được backend cung cấp:
 - `start_game` – khởi tạo ván mới
 - `guess_number` – gửi số dự đoán, nhận phản hồi và trạng thái
 - `reset_game` – bắt đầu lại ván chơi
+- `play_sound` – phát âm thanh (Correct | Wrong | Reset) bằng rodio (backend) tránh phụ thuộc WebKit GStreamer
 
 ## Cách chơi (How to play)
 
@@ -76,6 +77,20 @@ Lưu ý khi chạy AppImage trên distro mới có thể cần `libfuse2`:
 ```bash
 sudo apt install -y libfuse2  # Debian/Ubuntu
 ```
+
+Ngoài ra, để build phần âm thanh backend (rodio/cpal) cần ALSA headers và pkg-config:
+- Debian/Ubuntu:
+  ```bash
+  sudo apt install -y libasound2-dev pkg-config
+  ```
+- Fedora:
+  ```bash
+  sudo dnf install -y alsa-lib-devel pkgconf-pkg-config
+  ```
+- Arch/Manjaro:
+  ```bash
+  sudo pacman -S --needed alsa-lib pkgconf
+  ```
 
 ### Windows prerequisites (xây dựng trên Windows)
 
@@ -168,7 +183,7 @@ Bạn có thể dùng GitHub Actions để tạo artifact AppImage (Ubuntu) và 
       ```bash
       sudo pacman -S --needed gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
       ```
-  - Ứng dụng đã ưu tiên WAV và `preload="none"` cho thẻ audio để hạn chế khởi tạo GStreamer sớm. Nếu vẫn lỗi, âm thanh sẽ bị bỏ qua an toàn (bắt lỗi khi `.play()`).
+  - Ứng dụng đã chuyển sang phát âm thanh ở backend với `rodio` (`play_sound`) để giảm phụ thuộc plugin GStreamer khi chạy AppImage. Nếu vẫn lỗi, âm thanh sẽ bị bỏ qua an toàn (bắt lỗi khi `.play()`).
 
 ## Giấy phép
 
