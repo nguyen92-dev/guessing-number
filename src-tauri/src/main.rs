@@ -4,9 +4,14 @@ use tauri::{self};
 use rand::Rng;
 use serde::{Serialize, Deserialize};
 use std::sync::{Arc, Mutex};
+use std::io::Cursor;
 
-#[derive(Default, Clone, Serialize, Deserialize)]
+#[derive(Clone)]
 struct GameState(Arc<Mutex<InnerState>>);
+
+impl Default for GameState {
+    fn default() -> Self { Self(Arc::new(Mutex::new(InnerState::default()))) }
+}
 
 #[derive(Default, Clone, Serialize, Deserialize)]
 struct InnerState {
@@ -55,10 +60,34 @@ fn reset_game(state: tauri::State<GameState>) -> InnerState {
     inner.clone()
 }
 
+#[derive(Serialize, Deserialize)]
+enum SoundKind { Correct, Wrong, Reset }
+
+#[tauri::command]
+fn play_sound(kind: SoundKind) -> Result<(), String> {
+    let bytes: &'static [u8] = match kind {
+        SoundKind::Correct => include_bytes!("../../src/sounds/correct.wav"),
+        SoundKind::Wrong => include_bytes!("../../src/sounds/wrong.wav"),
+        SoundKind::Reset => include_bytes!("../../src/sounds/reset.wav"),
+    };
+    std::thread::spawn(move || {
+        if let Ok((stream, handle)) = rodio::OutputStream::try_default() {
+            if let Ok(sink) = rodio::Sink::try_new(&handle) {
+                if let Ok(decoder) = rodio::Decoder::new(Cursor::new(bytes)) {
+                    sink.append(decoder);
+                    sink.sleep_until_end();
+                }
+            }
+            drop(stream);
+        }
+    });
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
-        .manage(GameState(Default::default()))
-        .invoke_handler(tauri::generate_handler![start_game, guess_number, reset_game])
+        .manage(GameState::default())
+        .invoke_handler(tauri::generate_handler![start_game, guess_number, reset_game, play_sound])
         .run(tauri::generate_context!())
         .expect("error while running Tauri");
 }
