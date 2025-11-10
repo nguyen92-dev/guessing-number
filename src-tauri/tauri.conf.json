@@ -9,6 +9,7 @@
     "beforeBuildCommand": ""
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "Đoán Số Dễ Thương",
@@ -19,7 +20,18 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        {
+          "identifier": "main-capability",
+          "windows": [
+            "main"
+          ],
+          "permissions": [
+            "core:window:allow-close"
+          ]
+        }
+      ]
     }
   },
   "bundle": {
