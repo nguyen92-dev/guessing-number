@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đoán Số Dễ Thương</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Trò Chơi Đoán Số! 🎉</h1>
+        <p id="message">Chào bé! Đoán số từ 1 đến 100 nhé! 😊</p>
+        <input type="number" id="guess" placeholder="Bé đoán số..." min="1" max="100">
+        <button id="guess-btn">Đoán xem! 🔍</button>
+        <button id="reset-btn">Chơi lại 🎮</button>
+        <button id="exit-btn">Kết thúc 👋</button>
+    </div>
+    <audio id="correct-sound" src="sounds/correct.mp3"></audio> <!-- Thêm file âm thanh -->
+    <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
+    <audio id="reset-sound" src="sounds/reset.mp3"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
