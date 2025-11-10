@@ -18,9 +18,9 @@ struct InnerState {
 #[tauri::command]
 fn start_game(state: tauri::State<GameState>) -> InnerState {
     let mut inner = state.0.lock().unwrap();
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     *inner = InnerState {
-        secret_number: rng.gen_range(1..=100),
+        secret_number: rng.random_range(1..=100),
         message: "Chào bé! Đoán số từ 1 đến 100 nhé! 😊".to_string(),
         game_over: false,
     };
@@ -46,9 +46,9 @@ fn guess_number(state: tauri::State<GameState>, guess: u32) -> InnerState {
 #[tauri::command]
 fn reset_game(state: tauri::State<GameState>) -> InnerState {
     let mut inner = state.0.lock().unwrap();
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     *inner = InnerState {
-        secret_number: rng.gen_range(1..=100),
+        secret_number: rng.random_range(1..=100),
         message: "Chơi lại nhé! Đoán số mới đi! 🎲".to_string(),
         game_over: false,
     };
@@ -56,9 +56,8 @@ fn reset_game(state: tauri::State<GameState>) -> InnerState {
 }
 
 fn main() {
-    tauri::Builder::new()
+    tauri::Builder::default()
         .manage(GameState(Default::default()))
-        .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![start_game, guess_number, reset_game])
         .run(tauri::generate_context!())
         .expect("error while running Tauri");

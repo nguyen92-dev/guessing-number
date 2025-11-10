@@ -38,7 +38,7 @@ document.getElementById('reset-btn').addEventListener('click', async () => {
 });
 
 document.getElementById('exit-btn').addEventListener('click', () => {
-  window.close();
+  window.__TAURI__.window.getCurrentWindow().close();
 });
 
 initGame();
