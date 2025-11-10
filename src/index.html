@@ -14,9 +14,18 @@
         <button id="reset-btn">Chơi lại 🎮</button>
         <button id="exit-btn">Kết thúc 👋</button>
     </div>
-    <audio id="correct-sound" src="sounds/correct.mp3"></audio> <!-- Thêm file âm thanh -->
-    <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
-    <audio id="reset-sound" src="sounds/reset.mp3"></audio>
+    <audio id="correct-sound" preload="none">
+        <source src="sounds/correct.wav" type="audio/wav">
+        <source src="sounds/correct.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="wrong-sound" preload="none">
+        <source src="sounds/wrong.wav" type="audio/wav">
+        <source src="sounds/wrong.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="reset-sound" preload="none">
+        <source src="sounds/reset.wav" type="audio/wav">
+        <source src="sounds/reset.mp3" type="audio/mpeg">
+    </audio>
     <script src="script.js"></script>
 </body>
 </html>

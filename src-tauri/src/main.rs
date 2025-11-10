@@ -1,6 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{self, Manager};
+use tauri::{self};
 use rand::Rng;
 use serde::{Serialize, Deserialize};
 use std::sync::{Arc, Mutex};
